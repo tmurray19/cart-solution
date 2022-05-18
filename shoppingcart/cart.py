@@ -18,13 +18,17 @@ class ShoppingCart(abc.ShoppingCart):
     def print_receipt(self) -> typing.List[str]:
         lines = []
 
+        # Defining total variable to add to in for loop
+        total = 0
+
         for item in self._items.items():
             price = self._get_product_price(item[0]) * item[1]
+            total += price
 
             price_string = "€%.2f" % price
 
             lines.append(item[0] + " - " + str(item[1]) + ' - ' + price_string)
-
+        lines.append(f'Total: €{"%.2f" % total}')
         return lines
 
     def _get_product_price(self, product_code: str) -> float:
