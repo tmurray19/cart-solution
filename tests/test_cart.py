@@ -109,14 +109,29 @@ def test_read_from_json():
     # Showing that there has been a price change, and that the shopping cart is reading the updated price as defined in the JSON
     assert receipt[0] == "banana - 1 - €1.50"
 
+def test_read_empty():
+    """
+    Test to show that system can handle a product that doesn't exist
+    """
+
+    cart = ShoppingCart()
+
+    # Adding item out of price list
+    cart.add_item("shoes", 1)
+
+    receipt = cart.print_receipt()
+
+    assert receipt[0] == "Total: €0.00"
+
 def test_read_empty_json():
     """
-    Test to show that system can handle an empty read
+    Test to show that system can handle a product that doesn't exist in the JSON
     """
 
     cart = ShoppingCart()
     cart.set_json(utils.open_json('tests\sample.json'))
 
+    # Adding item out of JSON price list
     cart.add_item("shoes", 1)
 
     receipt = cart.print_receipt()
