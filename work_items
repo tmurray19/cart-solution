@@ -8,6 +8,7 @@ Add a total line to the receipt:
 
 Be able to fetch product prices form an external source:
     - Create a way to open a JSON file and load external data sources
+    - Loading JSON should be optional (optional 'alternative' price list, like a special sale)
     - Functionality for other dbs (mysql, mongodb, etc)?
 
 Display price in different currencies:

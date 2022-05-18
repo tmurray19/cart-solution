@@ -7,6 +7,17 @@ from collections import OrderedDict
 class ShoppingCart(abc.ShoppingCart):
     def __init__(self):
         self._items = OrderedDict()
+        # To store JSON information
+        self._json = None
+
+    # Accessor for json
+    def get_json(self) -> dict:
+        return self._json
+    
+    # Mutator for json
+    def set_json(self, json: dict):
+        self._json = json
+
 
     def add_item(self, product_code: str, quantity: int):
         if product_code not in self._items:
@@ -32,6 +43,14 @@ class ShoppingCart(abc.ShoppingCart):
         return lines
 
     def _get_product_price(self, product_code: str) -> float:
+        # Loading json should be optional
+        if self.get_json() is not None:
+            # Return product, or None if product doesn't exist in JSON
+            if product_code in self.get_json():
+                return self.get_json()[product_code]
+            else:
+                return None
+
         price = 0.0
 
         if product_code == 'apple':
