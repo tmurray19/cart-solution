@@ -33,12 +33,15 @@ class ShoppingCart(abc.ShoppingCart):
         total = 0
 
         for item in self._items.items():
-            price = self._get_product_price(item[0]) * item[1]
-            total += price
+            # Modified code to handle products outside of price range
+            price = self._get_product_price(item[0])
+            if price is not None:
+                price *= item[1]
+                total += price
 
-            price_string = "€%.2f" % price
+                price_string = "€%.2f" % price
 
-            lines.append(item[0] + " - " + str(item[1]) + ' - ' + price_string)
+                lines.append(item[0] + " - " + str(item[1]) + ' - ' + price_string)
         lines.append(f'Total: €{"%.2f" % total}')
         return lines
 
@@ -51,6 +54,7 @@ class ShoppingCart(abc.ShoppingCart):
             else:
                 return None
 
+        # Original functionality is currnently left in to not break existing functionality 
         price = 0.0
 
         if product_code == 'apple':
