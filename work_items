@@ -1,0 +1,21 @@
+Make receipts print items in the order they were added:
+    - Currently uses a dict to store items
+    - Dicts are not a FIFO structure
+    - Use an OrderedDict instead
+
+Add a total line to the receipt:
+    - Calculate a total whenever the receipt is being generated
+
+Be able to fetch product prices form an external source:
+    - Create a way to open a JSON file and load external data sources
+    - Functionality for other dbs (mysql, mongodb, etc)?
+
+Display price in different currencies:
+    - Use something to convert existing price into desired price
+    - Look at libraries
+
+Update test suite to extend coverage and limit the number of tests which need changing when changes are introduced:
+    - Expand to account for new functionality
+
+Any other changes which improve the reliability of this code in production:
+    - Ensure code can handle unexpected input
