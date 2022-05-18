@@ -4,11 +4,16 @@ from . import abc
 # Import OrderedDict to print out items in order they were entered
 from collections import OrderedDict
 
+# This is imported for an accurate day-to-day currency exchange
+from forex_python.converter import CurrencyRates
+
 class ShoppingCart(abc.ShoppingCart):
-    def __init__(self):
+    def __init__(self, currency: str="EUR"):
         self._items = OrderedDict()
         # To store JSON information
         self._json = None
+        # To store the currency of the Shopping Cart
+        self._currency = currency
 
     # Accessor for json
     def get_json(self) -> dict:
@@ -68,3 +73,16 @@ class ShoppingCart(abc.ShoppingCart):
             price = 3.0
 
         return price
+        
+    def convert_cost(self, price:float, desired:str) -> float:
+        """
+        Takes a specified price, gets the base currency from the shopping cart
+        and converts the price to the destination 
+        """
+        #TODO: I am assuming this shop operates in Ireland, so all products are stored in Euro
+        if self.get_currency() == "EUR":
+            return price
+    
+        # Return regular price if currency not found
+        return CurrencyRates().convert("EUR", desired, price) or price
+        
