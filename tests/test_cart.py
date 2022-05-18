@@ -1,5 +1,5 @@
 from shoppingcart.cart import ShoppingCart
-
+from shoppingcart import utils
 
 def test_add_item():
     cart = ShoppingCart()
@@ -82,3 +82,43 @@ def test_empty():
     cart = ShoppingCart()
 
     assert cart.print_receipt()[0] == "Total: €0.00"
+
+def test_read_from_json():
+    """
+    Test to show that JSON can be read from, and it overwrites any existing price
+    """
+
+    # Show a baseline receipt with the default banana price
+    cart = ShoppingCart()
+    cart.add_item("banana", 1)
+
+    receipt = cart.print_receipt()
+
+    assert receipt[0] == "banana - 1 - €1.10"     
+ 
+    # Create a new ShoppingCart instance 
+    cart = ShoppingCart()
+
+    # Open and set JSON 
+    cart.set_json(utils.open_json('tests\sample.json'))
+
+    # Add an item to cart
+    cart.add_item("banana", 1)
+    receipt = cart.print_receipt()
+    
+    # Showing that there has been a price change, and that the shopping cart is reading the updated price as defined in the JSON
+    assert receipt[0] == "banana - 1 - €1.50"
+
+def test_read_empty_json():
+    """
+    Test to show that system can handle an empty read
+    """
+
+    cart = ShoppingCart()
+    cart.set_json(utils.open_json('tests\sample.json'))
+
+    cart.add_item("shoes", 1)
+
+    receipt = cart.print_receipt()
+
+    assert receipt[0] == "Total: €0.00"
