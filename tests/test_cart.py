@@ -1,5 +1,6 @@
 from shoppingcart.cart import ShoppingCart
 from shoppingcart import utils
+from forex_python.converter import CurrencyRates
 
 def test_add_item():
     cart = ShoppingCart()
@@ -137,3 +138,30 @@ def test_read_empty_json():
     receipt = cart.print_receipt()
 
     assert receipt[0] == "Total: €0.00"
+
+def test_currency_changer_set():
+    """
+    Test that the currency of a cart can be set and changed"""
+    cart = ShoppingCart()
+
+    assert cart.get_currency() == "EUR"
+    cart.set_currency("USD")
+    assert cart.get_currency() == "USD"
+
+    # Test that it can be set on startup
+    cart = ShoppingCart("USD")
+    assert cart.get_currency() == "USD"
+
+def test_currency_exchange_end_to_end():
+    cart = ShoppingCart(currency="USD")
+    
+    # Add Items
+    cart.add_item("banana", 1)
+    cart.add_item("kiwi", 1)
+
+    receipt = cart.print_receipt()
+
+    c = CurrencyRates()
+
+    assert receipt[0] == f'banana - 1 - {"%.2f" % c.convert(base_cur="EUR", dest_cur="USD", amount=1.10)} USD'
+    assert receipt[1] == f'kiwi - 1 - {"%.2f" % c.convert("EUR", "USD", 3.00)} USD'

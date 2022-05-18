@@ -23,6 +23,13 @@ class ShoppingCart(abc.ShoppingCart):
     def set_json(self, json: dict):
         self._json = json
 
+    # Accessor for currency
+    def get_currency(self) -> str:
+        return self._currency
+
+    # Mutator for currency
+    def set_currency(self, currency: str):
+        self._currency = currency
 
     def add_item(self, product_code: str, quantity: int):
         if product_code not in self._items:
@@ -73,7 +80,7 @@ class ShoppingCart(abc.ShoppingCart):
             price = 3.0
 
         return price
-        
+
     def convert_cost(self, price:float, desired:str) -> float:
         """
         Takes a specified price, gets the base currency from the shopping cart
