@@ -1,11 +1,12 @@
 import typing
 
 from . import abc
-
+# Import OrderedDict to print out items in order they were entered
+from collections import OrderedDict
 
 class ShoppingCart(abc.ShoppingCart):
     def __init__(self):
-        self._items = dict()
+        self._items = OrderedDict()
 
     def add_item(self, product_code: str, quantity: int):
         if product_code not in self._items:

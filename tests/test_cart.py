@@ -28,3 +28,20 @@ def test_add_different_items():
 
     assert receipt[0] == "banana - 1 - €1.10"
     assert receipt[1] == "kiwi - 1 - €3.00"
+
+def test_printed_in_order():
+    """
+    Shows that banana was added first, and comes out in the receipt list first
+    """
+    cart = ShoppingCart()
+    cart.add_item("banana", 1)
+    cart.add_item("kiwi", 99)
+    cart.add_item("banana", 1)
+    cart.add_item("apple", 3)
+    cart.add_item("banana", 1)
+
+    receipt = cart.print_receipt()
+
+    assert receipt[0] == "banana - 3 - €3.30"
+    assert receipt[1] == "kiwi - 99 - €297.00"
+    assert receipt[2] == "apple - 3 - €3.00"
