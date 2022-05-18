@@ -35,6 +35,7 @@ class ShoppingCart(abc.ShoppingCart):
         for item in self._items.items():
             # Modified code to handle products outside of price range
             price = self._get_product_price(item[0])
+            # Only add to receipt, if price exists
             if price is not None:
                 price *= item[1]
                 total += price
@@ -55,7 +56,7 @@ class ShoppingCart(abc.ShoppingCart):
                 return None
 
         # Original functionality is currnently left in to not break existing functionality 
-        price = 0.0
+        price = None
 
         if product_code == 'apple':
             price = 1.0
