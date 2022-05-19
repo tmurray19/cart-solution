@@ -48,14 +48,18 @@ class ShoppingCart(abc.ShoppingCart):
             # Modified code to handle products outside of price range
             price = self._get_product_price(item[0])
             # Only add to receipt, if price exists
-            if price is not None:
+            if price is not None:   
+                # Convert price to desired price 
+                price = self.convert_cost(price, self.get_currency())
+
                 price *= item[1]
                 total += price
 
-                price_string = "€%.2f" % price
+                price_string = "%.2f" % price
 
-                lines.append(item[0] + " - " + str(item[1]) + ' - ' + price_string)
-        lines.append(f'Total: €{"%.2f" % total}')
+                # lines.append(item[0] + " - " + str(item[1]) + ' - ' + price_string)
+                lines.append(f'{item[0]} - {str(item[1])} - {price_string} {self.get_currency()}')
+        lines.append(f'Total: {"%.2f" % total} {self.get_currency()}')
         return lines
 
     def _get_product_price(self, product_code: str) -> float:

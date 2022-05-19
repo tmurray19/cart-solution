@@ -8,7 +8,7 @@ def test_add_item():
 
     receipt = cart.print_receipt()
 
-    assert receipt[0] == "apple - 1 - €1.00"
+    assert receipt[0] == "apple - 1 - 1.00 EUR"
 
 
 def test_add_item_with_multiple_quantity():
@@ -17,7 +17,7 @@ def test_add_item_with_multiple_quantity():
 
     receipt = cart.print_receipt()
 
-    assert receipt[0] == "apple - 2 - €2.00"
+    assert receipt[0] == "apple - 2 - 2.00 EUR"
 
 
 def test_add_different_items():
@@ -27,8 +27,8 @@ def test_add_different_items():
 
     receipt = cart.print_receipt()
 
-    assert receipt[0] == "banana - 1 - €1.10"
-    assert receipt[1] == "kiwi - 1 - €3.00"
+    assert receipt[0] == "banana - 1 - 1.10 EUR"
+    assert receipt[1] == "kiwi - 1 - 3.00 EUR"
 
 def test_printed_in_order():
     """
@@ -43,9 +43,9 @@ def test_printed_in_order():
 
     receipt = cart.print_receipt()
 
-    assert receipt[0] == "banana - 3 - €3.30"
-    assert receipt[1] == "kiwi - 99 - €297.00"
-    assert receipt[2] == "apple - 3 - €3.00"
+    assert receipt[0] == "banana - 3 - 3.30 EUR"
+    assert receipt[1] == "kiwi - 99 - 297.00 EUR"
+    assert receipt[2] == "apple - 3 - 3.00 EUR"
 
 def test_total():
     """
@@ -57,8 +57,8 @@ def test_total():
 
     receipt = cart.print_receipt()
 
-    assert receipt[0] == "banana - 1 - €1.10"
-    assert receipt[1] == "Total: €1.10"
+    assert receipt[0] == "banana - 1 - 1.10 EUR"
+    assert receipt[1] == "Total: 1.10 EUR"
 
 def test_total_multiple():
     """
@@ -72,9 +72,9 @@ def test_total_multiple():
 
     receipt = cart.print_receipt()
 
-    assert receipt[0] == "banana - 2 - €2.20"
+    assert receipt[0] == "banana - 2 - 2.20 EUR"
     # Check last element of list
-    assert receipt[-1] == "Total: €11.20"
+    assert receipt[-1] == "Total: 11.20 EUR"
 
 def test_empty():
     """
@@ -82,7 +82,7 @@ def test_empty():
     """
     cart = ShoppingCart()
 
-    assert cart.print_receipt()[0] == "Total: €0.00"
+    assert cart.print_receipt()[0] == "Total: 0.00 EUR"
 
 def test_read_from_json():
     """
@@ -95,7 +95,7 @@ def test_read_from_json():
 
     receipt = cart.print_receipt()
 
-    assert receipt[0] == "banana - 1 - €1.10"     
+    assert receipt[0] == "banana - 1 - 1.10 EUR"     
  
     # Create a new ShoppingCart instance 
     cart = ShoppingCart()
@@ -108,7 +108,7 @@ def test_read_from_json():
     receipt = cart.print_receipt()
     
     # Showing that there has been a price change, and that the shopping cart is reading the updated price as defined in the JSON
-    assert receipt[0] == "banana - 1 - €1.50"
+    assert receipt[0] == "banana - 1 - 1.50 EUR"
 
 def test_read_empty():
     """
@@ -122,7 +122,7 @@ def test_read_empty():
 
     receipt = cart.print_receipt()
 
-    assert receipt[0] == "Total: €0.00"
+    assert receipt[0] == "Total: 0.00 EUR"
 
 def test_read_empty_json():
     """
@@ -137,7 +137,7 @@ def test_read_empty_json():
 
     receipt = cart.print_receipt()
 
-    assert receipt[0] == "Total: €0.00"
+    assert receipt[0] == "Total: 0.00 EUR"
 
 def test_currency_changer_set():
     """
