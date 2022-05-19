@@ -9,6 +9,13 @@ from forex_python.converter import CurrencyRates
 
 class ShoppingCart(abc.ShoppingCart):
     def __init__(self, currency: str="EUR"):
+        """
+        Create a new Shopping Cart instance
+
+        items -> List of products in a given Cart
+        currency -> ISO Tag for currency [EUR=euro, USD=American Dollars, GBP=UK Pounds, etxc.]
+        json -> For storing any loaded json 
+        """
         self._items = OrderedDict()
         # To store JSON information
         self._json = None
@@ -30,36 +37,55 @@ class ShoppingCart(abc.ShoppingCart):
     # Mutator for currency
     def set_currency(self, currency: str):
         self._currency = currency
+ 
+    ## Adding accessor and mutator for existing private variable
+    # Accessor for items
+    def get_items(self) -> OrderedDict:
+        return self._items
+    
+    # Mutator for items
+    def set_items(self, items: OrderedDict):
+        self._items = items
 
+    
     def add_item(self, product_code: str, quantity: int):
-        if product_code not in self._items:
-            self._items[product_code] = quantity
+        """
+        Attempts to add a product to the list of items. If the item doesnt exist, it adds it with the specified quantity
+        Otherwise, it adds the quantity to the existing product
+
+        product_code: str -> The product code as defined in the JSON, or the default price list in the _get_product_price() function
+        quantity: int -> The amount to add to the shopping cart
+        """
+        if product_code not in self.get_items():
+            self.get_items()[product_code] = quantity
         else:
-            q = self._items[product_code]
-            self._items[product_code] = q + quantity
+            # Removed a line
+            self.get_items()[product_code] += quantity
 
     def print_receipt(self) -> typing.List[str]:
+        """
+        Iterates through the list of items in the shopping cart, and returns the data as a formatted list, along with the total at the end
+        """
         lines = []
 
         # Defining total variable to add to in for loop
         total = 0
 
-        for item in self._items.items():
+        # Unpacking iteratbles for readability
+        for product, quantity in self._items.items():
             # Modified code to handle products outside of price range
-            price = self._get_product_price(item[0])
+            price = self._get_product_price(product)
             # Only add to receipt, if price exists
             if price is not None:   
                 # Convert price to desired price 
                 price = self.convert_cost(price, self.get_currency())
 
-                price *= item[1]
+                price *= quantity
                 total += price
 
-                price_string = "%.2f" % price
-
-                # lines.append(item[0] + " - " + str(item[1]) + ' - ' + price_string)
-                lines.append(f'{item[0]} - {str(item[1])} - {price_string} {self.get_currency()}')
+                lines.append(f'{product} - {quantity} - {"%.2f" % price} {self.get_currency()}')
         lines.append(f'Total: {"%.2f" % total} {self.get_currency()}')
+
         return lines
 
     def _get_product_price(self, product_code: str) -> float:
@@ -88,7 +114,10 @@ class ShoppingCart(abc.ShoppingCart):
     def convert_cost(self, price:float, desired:str) -> float:
         """
         Takes a specified price, gets the base currency from the shopping cart
-        and converts the price to the destination 
+        and converts the price to the destination
+
+        price: float -> Base cost that you want to convert
+        desired: str -> ISO Currency code you want to convert the price into 
         """
         #TODO: I am assuming this shop operates in Ireland, so all products are stored in Euro
         if self.get_currency() == "EUR":

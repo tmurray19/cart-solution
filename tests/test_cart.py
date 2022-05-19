@@ -140,8 +140,10 @@ def test_read_empty_json():
     assert receipt[0] == "Total: 0.00 EUR"
 
 def test_currency_changer_set():
+
     """
-    Test that the currency of a cart can be set and changed"""
+    Test that the currency of a cart can be set and changed
+    """
     cart = ShoppingCart()
 
     assert cart.get_currency() == "EUR"
@@ -153,6 +155,9 @@ def test_currency_changer_set():
     assert cart.get_currency() == "USD"
 
 def test_currency_exchange_end_to_end():
+    """
+    Test that receipt can output price in requested currency
+    """
     cart = ShoppingCart(currency="USD")
     
     # Add Items
