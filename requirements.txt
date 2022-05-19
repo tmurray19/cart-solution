@@ -1,0 +1,1 @@
+forex_python==1.8
