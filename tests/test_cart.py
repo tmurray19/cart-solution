@@ -1,5 +1,5 @@
 from shoppingcart.cart import ShoppingCart
-from shoppingcart import json_db
+from shoppingcart.json_db import JsonDB
 from forex_python.converter import CurrencyRates
 
 def test_add_item():
@@ -91,6 +91,7 @@ def test_read_from_json():
 
     # Show a baseline receipt with the default banana price
     cart = ShoppingCart()
+    jsondb = JsonDB()
     cart.add_item("banana", 1)
 
     receipt = cart.print_receipt()
@@ -101,7 +102,7 @@ def test_read_from_json():
     cart = ShoppingCart()
 
     # Open and set JSON 
-    cart.set_json(json_db.open_json('tests\sample.json'))
+    cart.set_json(jsondb.open_db('tests\sample.json'))
 
     # Add an item to cart
     cart.add_item("banana", 1)
@@ -130,7 +131,8 @@ def test_read_empty_json():
     """
 
     cart = ShoppingCart()
-    cart.set_json(json_db.open_json('tests\sample.json'))
+    jsondb = JsonDB()
+    cart.set_json(jsondb.open_db('tests\sample.json'))
 
     # Adding item out of JSON price list
     cart.add_item("shoes", 1)
@@ -171,7 +173,32 @@ def test_currency_exchange_end_to_end():
     assert receipt[0] == f'banana - 1 - {"%.2f" % c.convert(base_cur="EUR", dest_cur="USD", amount=1.10)} USD'
     assert receipt[1] == f'kiwi - 1 - {"%.2f" % c.convert("EUR", "USD", 3.00)} USD'
 
-def test_json_():
+def test_json_end_to_end():
     """
     Test functions for interfacing with JSON database
     """
+    c =  JsonDB()
+    c.open_db('tests\sample.json')
+
+    # Test Product can be added
+    c.add_product({"grapes": 1})
+    assert c.get_product("grapes") == 1
+
+    # Test product 
+    c.add_product({"peaches": 3.5})
+    assert c.get_product("peaches") == 3.5
+
+    # Test removing product
+    c.add_product({"cars": 2.0})
+    assert c.get_product("cars") == 2.0
+
+    c.remove_product("cars")
+    assert c.get_product("cars") == None
+
+    # Test update product
+    c.update_product("grapes", 4.0)
+    assert c.get_product("grapes") == 4.0
+
+    # Test that all changes have been made correctly
+    assert c.open_db('tests\sample.json') == {"apple": 1.0, "banana": 1.5, "kiwi": 3.0, "grapes": 4.0, "peaches": 3.5}
+

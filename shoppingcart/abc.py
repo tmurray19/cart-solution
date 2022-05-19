@@ -33,3 +33,7 @@ class DatabaseAccess(abc.ABC):
     def update_product(self, product_id: str, update: float):
         pass
 
+    @abc.abstractmethod
+    def get_product(self, product_id: str) -> float:
+        pass
+
