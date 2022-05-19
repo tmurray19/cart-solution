@@ -1,5 +1,5 @@
 from shoppingcart.cart import ShoppingCart
-from shoppingcart import utils
+from shoppingcart import json_db
 from forex_python.converter import CurrencyRates
 
 def test_add_item():
@@ -101,7 +101,7 @@ def test_read_from_json():
     cart = ShoppingCart()
 
     # Open and set JSON 
-    cart.set_json(utils.open_json('tests\sample.json'))
+    cart.set_json(json_db.open_json('tests\sample.json'))
 
     # Add an item to cart
     cart.add_item("banana", 1)
@@ -130,7 +130,7 @@ def test_read_empty_json():
     """
 
     cart = ShoppingCart()
-    cart.set_json(utils.open_json('tests\sample.json'))
+    cart.set_json(json_db.open_json('tests\sample.json'))
 
     # Adding item out of JSON price list
     cart.add_item("shoes", 1)
@@ -170,3 +170,8 @@ def test_currency_exchange_end_to_end():
 
     assert receipt[0] == f'banana - 1 - {"%.2f" % c.convert(base_cur="EUR", dest_cur="USD", amount=1.10)} USD'
     assert receipt[1] == f'kiwi - 1 - {"%.2f" % c.convert("EUR", "USD", 3.00)} USD'
+
+def test_json_():
+    """
+    Test functions for interfacing with JSON database
+    """

@@ -12,3 +12,24 @@ class ShoppingCart(abc.ABC):
     @abc.abstractmethod
     def print_receipt(self) -> typing.List[str]:
         pass
+
+class DatabaseAccess(abc.ABC):
+    """
+    This is an abstract class to be extended to attempt to create a unified db connection service
+    """
+    @abc.abstractmethod
+    def open_db(self, location: str):
+        pass
+    
+    @abc.abstractmethod
+    def add_product(self, product: dict):
+        pass
+
+    @abc.abstractmethod
+    def remove_product(self, product_id: str):
+        pass
+
+    @abc.abstractmethod
+    def update_product(self, product_id: str, update: float):
+        pass
+
