@@ -121,8 +121,11 @@ class ShoppingCart(abc.ShoppingCart):
         """
         #TODO: I am assuming this shop operates in Ireland, so all products are stored in Euro
         if self.get_currency() == "EUR":
-            return price
+            # Ensure price is a float
+            return float(price)
     
         # Return regular price if currency not found
-        return CurrencyRates().convert("EUR", desired, price) or price
-        
+        try: 
+            return CurrencyRates().convert("EUR", desired, float(price))
+        except:
+            return price

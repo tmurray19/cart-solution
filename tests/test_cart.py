@@ -202,3 +202,45 @@ def test_json_end_to_end():
     # Test that all changes have been made correctly
     assert c.open_db('tests\sample.json') == {"apple": 1.0, "banana": 1.5, "kiwi": 3.0, "grapes": 4.0, "peaches": 3.5}
 
+
+def test_json_further():
+    """
+    Further tests for JSON functionality, making sure code can handle unexpected inputs
+    """
+
+    c =  JsonDB()
+    c.open_db('tests\sample.json')
+
+    # Test None Value
+    c.add_product({"bananas": None})
+    assert c.get_product("bananas") == None
+
+    # Test String value
+    c.add_product({"peaches": "3.5"})
+    assert c.get_product("peaches") == "3.5"
+
+    # Test that ShoppingCart can handle string value
+    cart = ShoppingCart()
+    cart.set_json(c.get_json())
+
+    # Peaches is handled correctly
+    cart.add_item("peaches", 1)
+    # Banana is added, but ignored in print receipt
+    cart.add_item("bananas", 1)
+
+    assert cart.print_receipt()[0] == "peaches - 1 - 3.50 EUR"
+    assert cart.print_receipt()[1] == "Total: 3.50 EUR"
+
+    # Test removing non existing value
+    c.remove_product("dragonfruit")
+    assert c.get_product("dragonfruit") == None
+
+    # Test update product - product doesn't exist in system
+    c.update_product("lychee", 4.0)
+    assert c.get_product("lychee") == None
+
+    # Test that all changes have been made correctly
+    assert c.open_db('tests\sample.json') == {"apple": 1.0, "banana": 1.5, "kiwi": 3.0, "grapes": 4.0, "peaches": "3.5", "bananas": None}
+
+    # Remove null bananas record from JSON file
+    c.remove_product('bananas')

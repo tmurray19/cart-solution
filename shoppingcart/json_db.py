@@ -69,8 +69,11 @@ class JsonDB(abc.DatabaseAccess):
 
         product_id: str -> The ID of the product you want removed from the JSON
         """
-        self.get_json().pop(product_id)
-        self._save_json_changes()
+        try:
+            self.get_json().pop(product_id)
+            self._save_json_changes()
+        except KeyError:
+            return None
 
     def get_product(self, product_id: str) -> float:
         """
@@ -89,5 +92,8 @@ class JsonDB(abc.DatabaseAccess):
         product_id: str -> The product ID the system needs to look for
         update: float -> The new price of the product
         """
-        self.get_json()[product_id] = update
-        self._save_json_changes()
+        if product_id in self.get_json():
+            self.get_json()[product_id] = update
+            self._save_json_changes()
+        else:
+            return
